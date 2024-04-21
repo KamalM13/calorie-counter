@@ -1,4 +1,5 @@
 import Calorie from "../models/calorie.model.js";
+import User from "../models/user.model.js";
 
 export const getAllCalories = async (req, res, next) => { 
     try {
@@ -14,10 +15,14 @@ export const getAllCalories = async (req, res, next) => {
 export const addCalorie = async (req, res, next) => { 
     try {
         const username = req.body.username;
-        const description = req.body.description;
+        const description = req.body.foodInfo;
         const calories = Number(req.body.calories);
         const date = Date.parse(req.body.date);
-
+        if (!username || !description || !calories || !date) return res.status(400).json("All fields are required")
+        const existingUser = await User.findOne({
+            username: username
+        })
+        if (!existingUser) return res.status(400).json("User does not exist")
         const addCalorie = new Calorie({
             username,
             description,
@@ -56,7 +61,6 @@ export const deleteCalorie = async (req, res, next) => {
 export const updateCalorie = async (req, res, next) => { 
     try {
         const calorie = await Calorie.findById(req.params.id);
-        calorie.username = req.body.username;
         calorie.description = req.body.description;
         calorie.calories = Number(req.body.calories);
         calorie.date = Date.parse(req.body.date);
