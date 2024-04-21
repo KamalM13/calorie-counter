@@ -8,6 +8,6 @@ router.get('/', getAllCalories)
 router.post('/add', addCalorie)
 router.get('/:id', getCalorie)
 router.delete('/:id', deleteCalorie)
-router.post('/update/:id', updateCalorie)
+router.post('/:id', updateCalorie)
 
 export default router;

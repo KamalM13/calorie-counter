@@ -16,6 +16,10 @@ export const getUsers = async (req, res, next) => {
 export const addUser = async (req, res, next) => { 
     try {
         const username = req.body.username;
+        const existingUser = await User.findOne({ username })
+        if (existingUser) { 
+            return res.status(400).json("User already exists");
+        }
         const newUser = new User({ username });
         await newUser.save();
         res.status(201).json("User added Successfully");
